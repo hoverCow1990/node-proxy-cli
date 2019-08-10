@@ -3,9 +3,7 @@
 
 // 引入依赖
 const program = require("commander");
-const through = require("through2");
 const chalk = require("chalk");
-const fs = require("fs-extra");
 const path = require("path");
 const inquirer = require("inquirer");
 const packages = require("../package.json");
@@ -15,8 +13,7 @@ const shell = require("shelljs");
 program
   .version(packages.version)
   .option("-v --version", "get cli version")
-  .option("-i --init", "init a project")
-  .option("-p --path", "show cli path");
+  .option("-i --init", "init a project");
 
 program.parse(process.argv);
 
@@ -88,12 +85,11 @@ if (program.init) {
     ])
     .then(answers => {
       const { name, git, type, distPath } = answers;
-      const gulpShell = `${path.join(
-        __dirname,
-        "../",
-        "node_modules/.bin/gulp"
-      )} ${type} --name ${name} --git ${git} --distPath ${distPath}`;
-      console.log(gulpShell);
+      const productPath = path.join(__dirname, "../");
+      const gulpShell = `${productPath}/node_modules/.bin/gulp ${type} --name ${name} --git ${git} --distPath ${distPath} --cwd ${process.cwd()} --gulpfile ${path.join(
+        productPath,
+        "gulpfile.js"
+      )}`;
       shell.exec(gulpShell);
 
       console.log("结果为:");
@@ -101,9 +97,6 @@ if (program.init) {
     });
 }
 
-if (program.path) {
-  console.log(__dirname, process.cwd());
-}
 // if (program.init) {
 // // 获取将要构建的项目根目录
 // var projectPath = path.resolve(program.init);
