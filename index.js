@@ -20,6 +20,17 @@ program
 program.parse(process.argv);
 
 if (program.init) {
+  console.log("<==================================================>");
+  console.log("");
+  console.log(
+    chalk.white(
+      "欢迎使用",
+      chalk.cyanBright(" nodeProxy-cli ") + " 构建工具, 希望你拥有好心情"
+    )
+  );
+  console.log("");
+  console.log("<==================================================>");
+
   inquirer
     .prompt([
       {
