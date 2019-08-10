@@ -88,16 +88,13 @@ if (program.init) {
     ])
     .then(answers => {
       const { name, git, type, distPath } = answers;
-      const gulpShell = `node_modules/.bin/gulp ${type} --name ${name} --git ${git} --distPath ${distPath}`;
-
+      const gulpShell = `${path.join(
+        __dirname,
+        "../",
+        "node_modules/.bin/gulp"
+      )} ${type} --name ${name} --git ${git} --distPath ${distPath}`;
+      console.log(gulpShell);
       shell.exec(gulpShell);
-
-      // if (git) {
-      //   shell
-      //     .cd("oyoWork")
-      //     .cd("web")
-      //     .exec(`git clone ${git}`);
-      // }
 
       console.log("结果为:");
       console.log(answers);

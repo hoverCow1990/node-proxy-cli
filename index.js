@@ -3,9 +3,7 @@
 
 // 引入依赖
 const program = require("commander");
-const through = require("through2");
 const chalk = require("chalk");
-const fs = require("fs-extra");
 const path = require("path");
 const inquirer = require("inquirer");
 const packages = require("./package.json");
@@ -88,8 +86,11 @@ if (program.init) {
     ])
     .then(answers => {
       const { name, git, type, distPath } = answers;
-      const gulpShell = `node_modules/.bin/gulp ${type} --name ${name} --git ${git} --distPath ${distPath}`;
-
+      const gulpShell = `${path.resolve(
+        __dirname,
+        "node_modules/.bin/gulp"
+      )} ${type} --name ${name} --git ${git} --distPath ${distPath}`;
+      console.log(gulpShell);
       shell.exec(gulpShell);
 
       // if (git) {
