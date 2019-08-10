@@ -15,7 +15,8 @@ const shell = require("shelljs");
 program
   .version(packages.version)
   .option("-v --version", "get cli version")
-  .option("-i --init", "init a project");
+  .option("-i --init", "init a project")
+  .option("-p --path", "show cli path");
 
 program.parse(process.argv);
 
@@ -103,6 +104,9 @@ if (program.init) {
     });
 }
 
+if (program.path) {
+  console.log(__dirname, process.cwd());
+}
 // if (program.init) {
 // // 获取将要构建的项目根目录
 // var projectPath = path.resolve(program.init);

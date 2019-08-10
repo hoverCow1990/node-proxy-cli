@@ -15,7 +15,8 @@ const shell = require("shelljs");
 program
   .version(packages.version)
   .option("-v --version", "get cli version")
-  .option("-i --init", "init a project");
+  .option("-i --init", "init a project")
+  .option("-p --path", "show cli path");
 
 program.parse(process.argv);
 
