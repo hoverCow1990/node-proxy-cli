@@ -5,6 +5,7 @@ const ENV = process.env.ENV;
 if (!["test", "dev", "uat", "prod"].includes(ENV)) {
   console.log("-----------------------------------------");
   console.log(chalk.red("请传有效环境参数test或者dev或者uat或者prod"));
+  console.log(chalk.red("如命令 npm run buildDev 或 npm run buildTest"));
   console.log("-----------------------------------------");
   process.exit();
 }
@@ -18,4 +19,4 @@ shell
   .exec(
     "npm install --registry=http://nexus.ahotels.tech/repository/npm-group/ "
   )
-  .exec("npm run build");
+  .exec("{{{ npm run build }}}");

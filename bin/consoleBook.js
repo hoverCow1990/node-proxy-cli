@@ -1,4 +1,6 @@
 const chalk = require("chalk");
+const unloadChar = "-";
+const loadedChar = "=";
 
 module.exports = {
   // 起始招呼
@@ -17,5 +19,15 @@ module.exports = {
     console.log(" =======================================================");
     console.log("");
     console.log("");
+  },
+  // 进度条
+  renderProgress(text, step, rl) {
+    const PERCENT = Math.round(step);
+    const COUNT = 2;
+    const unloadStr = new Array(COUNT * (50 - step)).fill(unloadChar).join("");
+    const loadedStr = new Array(COUNT * step).fill(loadedChar).join("");
+    process.stdout.write(
+      `${text}:【${chalk.green(loadedStr)}${unloadStr}|${PERCENT}%】`
+    );
   }
 };

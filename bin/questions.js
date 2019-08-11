@@ -59,5 +59,17 @@ module.exports = [
     name: "testScript",
     message: `${chalk.yellow("您项目启动test的命令是")} :`,
     default: "npm run test"
+  },
+  {
+    type: "String",
+    name: "buildScript",
+    message: `${chalk.yellow("您项目启动打包的命令是")} :`,
+    default: "npm run build"
+  },
+  {
+    type: "confirm",
+    name: "install",
+    message: `${chalk.yellow("是否帮你直接安装所有依赖")} :`,
+    default: "Y"
   }
 ];

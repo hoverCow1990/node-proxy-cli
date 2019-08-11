@@ -3,13 +3,18 @@
 
 // 引入依赖
 const program = require("commander");
-const chalk = require("chalk");
 const path = require("path");
 const inquirer = require("inquirer");
 const packages = require("../package.json");
 const shell = require("shelljs");
 const consoleBook = require("./consoleBook.js");
 const questions = require("./questions.js");
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 // 定义版本号以及命令选项
 program
@@ -22,8 +27,18 @@ program.parse(process.argv);
 if (program.init) {
   consoleBook.hello();
 
+  console.log("");
   inquirer.prompt(questions).then(answers => {
-    const { name, git, type, distPath, devScript, testScript } = answers;
+    const {
+      name,
+      git,
+      type,
+      distPath,
+      devScript,
+      testScript,
+      buildScript,
+      install
+    } = answers;
     const productPath = path.join(__dirname, "../");
     const query = {
       name,
@@ -32,7 +47,8 @@ if (program.init) {
       cwd: process.cwd(),
       gulpfile: path.join(productPath, "gulpfile.js"),
       devScript: `"${devScript}"`,
-      testScript: `"${testScript}"`
+      testScript: `"${testScript}"`,
+      buildScript: `"${buildScript}"`
     };
     const queryStr = Object.entries(query)
       .map(([key, val]) => {
@@ -41,11 +57,10 @@ if (program.init) {
       .join("");
 
     const gulpShell = `${productPath}/node_modules/.bin/gulp ${type} ${queryStr}`;
-    console.log(queryStr);
+
     shell.exec(gulpShell);
 
-    console.log("结果为:");
-    console.log(answers);
+    console.log("结果为:", answers);
   });
 }
 
@@ -82,11 +97,8 @@ if (program.init) {
 //     // 执行安装命令
 //     require("./lib/install");
 //   })
-//   .resume();
+//   .resume();readline
 // }
-
-// const unloadChar = "-";
-// const loadedChar = "=";
 
 // if (program.gg) {
 //   rl.question("项目名称?", answer => {
@@ -108,14 +120,4 @@ if (program.init) {
 //       i++;
 //     }, 200);
 //   });
-// }
-
-// function renderProgress(text, step) {
-//   const PERCENT = Math.round(step);
-//   const COUNT = 2;
-//   const unloadStr = new Array(COUNT * (100 - step)).fill(unloadChar).join("");
-//   const loadedStr = new Array(COUNT * step).fill(loadedChar).join("");
-//   process.stdout.write(
-//     `${text}:【${chalk.green(loadedStr)}${unloadStr}|${PERCENT}%】`
-//   );
 // }
