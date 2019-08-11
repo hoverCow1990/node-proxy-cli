@@ -4,12 +4,12 @@
   "scripts": {
     "start": "node index.js ",
     "build": "node ./script/build.js",
-    "builddev": "export LOCAL=true ENV='dev' && node ./script/build.js",
-    "buildtest": "export LOCAL=true ENV='test' && node ./script/build.js",
-    "dev": "cd ./web && npm run dev",
-    "test": "cd ./web && npm run test",
-    "d": "export LOCAL=true ENV='dev' SERVICE_ENV='dev' && node ./script/dev.js",
-    "t": "export LOCAL=true ENV='test' SERVICE_ENV='test' && node ./script/dev.js"
+    "dev": "cd ./web && {{{ npm run dev }}}",
+    "test": "cd ./web && {{{ npm run test }}}",
+    "buildDev": "export LOCAL=true ENV='dev' && node ./script/build.js",
+    "buildTest": "export LOCAL=true ENV='test' && node ./script/build.js",
+    "devService": "export LOCAL=true ENV='dev' SERVICE_ENV='dev' && node ./script/dev.js",
+    "testService": "export LOCAL=true ENV='test' SERVICE_ENV='test' && node ./script/dev.js"
   },
   "dependencies": {
     "axios": "^0.18.1",

@@ -8,93 +8,45 @@ const path = require("path");
 const inquirer = require("inquirer");
 const packages = require("../package.json");
 const shell = require("shelljs");
+const consoleBook = require("./consoleBook.js");
+const questions = require("./questions.js");
 
 // 定义版本号以及命令选项
 program
   .version(packages.version)
-  .option("-v --version", "get cli version")
+  .option("-v --version", "output the version number")
   .option("-i --init", "init a project");
 
 program.parse(process.argv);
 
 if (program.init) {
-  console.log("");
-  console.log("");
-  console.log(" =======================================================");
-  console.log(` |                                                     |`);
-  console.log(
-    chalk.white(` |    欢迎使用`),
-    chalk.cyanBright(" node-proxy-cli ") + " 构建工具,",
-    chalk.yellow("祝你好运"),
-    " -------  么么哒 ^_^"
-  );
-  console.log(` |                                                     |`);
-  console.log(" =======================================================");
-  console.log("");
-  console.log("");
+  consoleBook.hello();
 
-  inquirer
-    .prompt([
-      {
-        type: "String",
-        name: "name",
-        message: `${chalk.yellow("您项目的名称")}(不要全数字) :`,
-        default: "oyo-work",
-        validate: function(input) {
-          if (/^\d+$/.test(input)) return false;
+  inquirer.prompt(questions).then(answers => {
+    const { name, git, type, distPath, devScript, testScript } = answers;
+    const productPath = path.join(__dirname, "../");
+    const query = {
+      name,
+      git,
+      distPath,
+      cwd: process.cwd(),
+      gulpfile: path.join(productPath, "gulpfile.js"),
+      devScript: `"${devScript}"`,
+      testScript: `"${testScript}"`
+    };
+    const queryStr = Object.entries(query)
+      .map(([key, val]) => {
+        return val ? ` --${key} ${val}` : "";
+      })
+      .join("");
 
-          return true;
-        }
-      },
-      {
-        type: "String",
-        name: "git",
-        message: chalk.yellow("您项目的git地址: ")
-      },
-      {
-        type: "String",
-        name: "distPath",
-        message: chalk.yellow("您打包后静态文件目录: "),
-        default: "dist"
-      },
-      // {
-      //   type: "String",
-      //   name: "branch",
-      //   message: chalk.yellow("您想拉取的分支名: "),
-      //   default: "master"
-      // },
-      {
-        type: "rawlist",
-        name: "type",
-        message: chalk.yellow("您项目的渲染方式: "),
-        choices: [
-          {
-            value: "static",
-            name: "🐸  H5静态资源"
-          },
-          {
-            value: "umiSsr",
-            name: "🐝  umSSr渲染"
-          },
-          {
-            value: "vueSsr",
-            name: "🍎  vueSSr渲染"
-          }
-        ]
-      }
-    ])
-    .then(answers => {
-      const { name, git, type, distPath } = answers;
-      const productPath = path.join(__dirname, "../");
-      const gulpShell = `${productPath}/node_modules/.bin/gulp ${type} --name ${name} --git ${git} --distPath ${distPath} --cwd ${process.cwd()} --gulpfile ${path.join(
-        productPath,
-        "gulpfile.js"
-      )}`;
-      shell.exec(gulpShell);
+    const gulpShell = `${productPath}/node_modules/.bin/gulp ${type} ${queryStr}`;
+    console.log(queryStr);
+    shell.exec(gulpShell);
 
-      console.log("结果为:");
-      console.log(answers);
-    });
+    console.log("结果为:");
+    console.log(answers);
+  });
 }
 
 // if (program.init) {
