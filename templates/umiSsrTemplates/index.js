@@ -14,6 +14,7 @@ app.on("error", err => {
   logger.error(err);
 });
 
+// 处理body参数
 app.use(koaBody());
 
 // 代理转发

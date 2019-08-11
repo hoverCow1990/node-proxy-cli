@@ -16,6 +16,7 @@ app.on("error", err => {
   logger.error(err);
 });
 
+// 渲染静态资源html
 app.use(views(path.join(__dirname, "web", "{{{ dist }}}")));
 
 // 静态资源
